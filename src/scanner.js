@@ -25,7 +25,7 @@ export function initScanner() {
 
   takePhotoButton.addEventListener("click", () => {
     takePhoto(camera, canvas, previewImage);
-    simulateScan(scanLoader);
+    simulateScan(scanLoader, takePhotoButton);
   });
 
   monumentSelect.addEventListener("change", () => {
@@ -74,28 +74,36 @@ function takePhoto(camera, canvas, previewImage) {
   previewImage.classList.remove("hidden");
 }
 
-function simulateScan(scanLoader) {
-  scanLoader.classList.remove("hidden");
-  scanLoader.textContent = "Analyse de la photo en cours...";
+function simulateScan(scanLoader, takePhotoButton) {
+  scanLoader.className =
+    "mt-6 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 font-medium text-cyan-900";
+  scanLoader.textContent =
+    "Analyse de la photo en cours. Gardez la photo visible pendant quelques secondes.";
+  takePhotoButton.disabled = true;
+  takePhotoButton.textContent = "Analyse en cours...";
 
   setTimeout(() => {
+    scanLoader.className =
+      "mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 font-medium text-emerald-900";
     scanLoader.textContent =
       "Photo analysée. Veuillez confirmer le monument reconnu dans la liste.";
+    takePhotoButton.disabled = false;
+    takePhotoButton.textContent = "Reprendre une photo";
   }, 1200);
 }
 
 function displayScannerResult(scannerResult, monument) {
   scannerResult.innerHTML = `
-    <article class="rounded-xl bg-gray-100 p-5">
-      <h2 class="text-2xl font-bold text-gray-900">
+    <article class="rounded-xl bg-gray-100 p-5 dark:bg-slate-950">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
         ${monument.name}
       </h2>
 
-      <p class="mt-4 text-gray-700">
+      <p class="mt-4 text-gray-700 dark:text-slate-300">
         ${monument.description}
       </p>
 
-      <p class="mt-4 text-gray-700">
+      <p class="mt-4 text-gray-700 dark:text-slate-300">
         <strong>Adresse :</strong> ${monument.address}
       </p>
 
@@ -103,7 +111,7 @@ function displayScannerResult(scannerResult, monument) {
         href="${monument.googleMapsUrl}"
         target="_blank"
         rel="noopener noreferrer"
-        class="mt-5 inline-block rounded-lg bg-blue-700 px-5 py-3 font-semibold text-white transition hover:bg-blue-800"
+        class="mt-5 inline-block rounded-lg bg-blue-700 px-5 py-3 font-semibold text-white transition hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200"
       >
         Voir sur Google Maps
       </a>

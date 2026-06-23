@@ -5,12 +5,12 @@ import { monuments } from "../data/monuments.js";
 
 export function MonumentsPage() {
   return `
-    ${Header()}
+    ${Header("monuments")}
 
     <main>
       ${MonumentGrid(monuments)}
     </main>
 
-    ${Footer()}
+    ${Footer("monuments")}
   `;
 }
